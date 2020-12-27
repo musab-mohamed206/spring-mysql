@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.example.springmysql.BaseController;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/todos")
-public class TodoController {
+public class TodoController extends BaseController{
     @Autowired
     private TodoServices todoServices;
 
     @GetMapping("/")
     public ResponseEntity<List<Todo>> lisTodo() {
-        List<Todo> res = todoServices.findAll();
+        List<Todo> res = todoServices.findAllByUserId(getCurrentUser().getId());
         return new ResponseEntity<>(res , HttpStatus.OK);
     }
 
@@ -36,6 +38,7 @@ public class TodoController {
 
     @PostMapping(value="/")
     public ResponseEntity<Todo> inserTodo(@Valid @RequestBody Todo todo) {
+        todo.setUserId(getCurrentUser().getId());
         Todo res = todoServices.addTodo(todo);
         return new ResponseEntity<Todo>(res ,HttpStatus.CREATED);
     }

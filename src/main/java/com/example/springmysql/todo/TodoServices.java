@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import com.example.springmysql.error.ConflictException;
 import com.example.springmysql.error.NotFoundException;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,11 @@ public class TodoServices {
 
 	public List<Todo> findAll() {
 		return todoReposotary.findAll();
+	}
+
+
+	public List<Todo> findAllByUserId(Long userId) {
+		return todoReposotary.findAllByUserId(userId);
 	}
 
 	public Todo getById(Long id) {
