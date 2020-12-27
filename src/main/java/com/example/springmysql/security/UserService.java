@@ -4,10 +4,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import com.example.springmysql.error.NotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,8 +27,12 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO Auto-generated method stub
-        return new User("musab" , passwordEncoder().encode("password") ,AuthorityUtils.NO_AUTHORITIES);
+        //return new User("musab" , passwordEncoder().encode("password") ,AuthorityUtils.NO_AUTHORITIES);
+        AppUser user = userRepository.findByEmail(username);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        return user;
     }
 
     public void save(AppUser user) {
